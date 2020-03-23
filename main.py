@@ -35,4 +35,3 @@ def add_job():
 
 if __name__ == '__main__':
     db.global_init('db/mars.sqlite')
-    get_job()

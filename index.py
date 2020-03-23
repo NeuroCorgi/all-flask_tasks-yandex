@@ -21,15 +21,11 @@ from forms import (
     LoginForm,
 )
 
-import auth
-import jobs_view
-import jobs_api
-import departments_view
-
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = str(uuid4())
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
+app.config['DATABASE_NAME'] = 'db/mars.sqlite'
+app.config['TESTING'] = False
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -53,12 +49,24 @@ def home():
     return render_template('base.html', current_user=current_user,
                            title='Mars')
 
-def main():
-    db.global_init('db/mars.sqlite')
+
+if app.config['TESTING']:
+    import jobs_api
+    app.register_blueprint(jobs_api.blueprint)
+else:
+    import auth
+    import jobs_view
+    import jobs_api
+    import departments_view
+
     app.register_blueprint(auth.blueprint)
     app.register_blueprint(jobs_view.blueprint)
     app.register_blueprint(jobs_api.blueprint)
     app.register_blueprint(departments_view.blueprint)
+
+def main():
+    db.global_init(app.config['DATABASE_NAME'])
+
     app.run()
 
 

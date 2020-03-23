@@ -42,7 +42,7 @@ def new_job():
             collaborators=form.collaborators.data,
             is_finished=form.is_finished.data,
             team_leader=form.team_leader.data,
-            hazard=form.hazard_category.data
+            hazard_category=form.hazard_category.data
         )
         session.add(job)
         session.commit()

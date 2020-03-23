@@ -33,7 +33,7 @@ class Jobs(SqlAlchemyBase, SerializerMixin):
             self.end_date = kwargs['end_date']
             self.is_finished = kwargs['is_finished']
             self.team_leader = kwargs['team_leader']
-            self.hazard_category = kwargs['hazard']
+            self.hazard_category = kwargs['hazard_category']
 
     def __repr__(self):
         return f'<Job> {self.job}'

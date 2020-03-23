@@ -1,0 +1,13 @@
+.size-table {
+    width: 93%;
+    margin: 50px auto;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 10px;
+}
+
+table tr td {
+    border-style: solid;
+    border-width: 1px;
+    background-color: paleturquoise;
+}

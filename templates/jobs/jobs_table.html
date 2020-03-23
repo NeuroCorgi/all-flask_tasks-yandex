@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Jobs log</h2>
+<a href="/jobs/new" class="btn btn-secondary">Add job</a>
+{% if jobs %}
+    {% for job in jobs %}
+    <div>
+        <table class="table w-90 mt-5 mb-5">
+            <caption>
+                Job id is {{ job.id }}
+                {% if current_user.id == 1 or current_user.id == job.user.id %}
+                    <a href="/jobs/{{ job.id }}" class="btn btn-outline-warning">Edit</a>
+                    <a href="/jobs/{{ job.id }}/delete" class="btn btn-outline-danger">Delete</a>
+                {% endif %}
+            </caption>
+            <thead class="thead-dark">
+            <tr>
+                <th>Title of activity</th>
+                <th>Team leader</th>
+                <th>Duration</th>
+                <th>List of collaborators</th>
+                <th>Hazard category</th>
+                <th>Is finished</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ job.job }}</td>
+                <td>{{ job.user.surname }} {{ job.user.name }}</td>
+                <td>{{ job.work_size }} hours</td>
+                <td>{{ job.collaborators }}</td>
+                <td>{{ job.hazard_category }}</td>
+                <td>{% if job.is_finished %} Finished {% else %} Is not finished {% endif %}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    {% endfor %}
+{% else %}
+    <p>No works found</p>
+{% endif %}
+{% endblock %}

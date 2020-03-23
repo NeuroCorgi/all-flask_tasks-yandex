@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>New department</h2>
+<form  action="" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <!-- Title -->
+    <p>
+        {{ form.title.label }}<br>
+        {{ form.title(class="form-control") }}<br>
+        {% for error in form.title.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+    </p>
+    <!-- Chief -->
+    {% if current_user.id != 1 %}
+        <p>
+            {{ form.chief.label }}
+            {{ form.chief(class="form-control", value=current_user.id)}}
+        </p>
+    {% else %}
+        <p>
+            {{ form.chief.label }}<br>
+            {{ form.chief(class="form-control") }}<br>
+            {% for error in form.chief.errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+            {% endfor %}
+        </p>
+    {% endif %}
+    <!-- Members -->
+    <p>
+        {{ form.members.label }}<br>
+        {{ form.members(class="form-control") }}<br>
+        {% for error in form.members.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+    </p>
+    <!-- Email -->
+    <p>
+        {{ form.email.label }}<br>
+        {{ form.email(class="form-control") }}<br>
+        {% for error in form.email.errors %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endfor %}
+    </p>
+
+
+    <p>{{ form.submit(type="submit", class="btn btn-primary", value="submit") }}</p>
+</form>
+{% endblock %}

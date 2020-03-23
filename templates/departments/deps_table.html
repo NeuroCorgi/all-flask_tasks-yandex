@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Departments log</h2>
+<a href="/departments/new" class="btn btn-secondary">Add department</a>
+{% if deps %}
+    {% for dep in deps %}
+    <div>
+        <table class="table w-90 mt-5 mb-5">
+            <caption>
+                Department id is {{ dep.id }}
+                {% if current_user.id == 1 or current_user.id == dep.chief.id %}
+                    <a href="/departments/{{ dep.id }}" class="btn btn-outline-warning">Edit</a>
+                    <a href="/departments/{{ dep.id }}/delete" class="btn btn-outline-danger">Delete</a>
+                {% endif %}
+            </caption>
+            <thead class="thead-dark">
+            <tr>
+                <th>Title of department</th>
+                <th>Chief</th>
+                <th>Members</th>
+                <th>Department email</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ dep.title }}</td>
+                <td>{{ dep.chief.surname }} {{ dep.chief.name }}</td>
+                <td>{{ dep.members }}</td>
+                <td>{{ dep.email }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    {% endfor %}
+{% else %}
+<h3>No departments found</h3>
+{% endif %}
+{% endblock %}

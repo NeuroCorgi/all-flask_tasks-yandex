@@ -29,6 +29,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     email = sqlalchemy.Column(sqlalchemy.String, index=True, unique=True, nullable=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     modifed_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
+    city_from = sqlalchemy.Column(sqlalchemy.String)
 
     jobs = orm.relation('Jobs', back_populates='user')
     departments = orm.relationship('Department', back_populates='user')
@@ -50,7 +51,9 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
 
     def __repr__(self):
         return f"<User> {self.surname} {self.name}"
-
+    
+    def to_dict(self):
+        return super().to_dict(only=('id', 'surname', 'name', 'age', 'position', 'speciality', 'address', 'email', 'modifed_date', 'city_from'))
     
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)

@@ -53,20 +53,28 @@ def home():
 if app.config['TESTING']:
     import jobs_api
     app.register_blueprint(jobs_api.blueprint)
-else:
-    import auth
-    import jobs_view
-    import jobs_api
-    import departments_view
 
-    app.register_blueprint(auth.blueprint)
-    app.register_blueprint(jobs_view.blueprint)
-    app.register_blueprint(jobs_api.blueprint)
-    app.register_blueprint(departments_view.blueprint)
 
 def main():
     db.global_init(app.config['DATABASE_NAME'])
+    
+    import auth
 
+    import jobs_view
+    import departments_view
+    import users_view
+
+    import jobs_api
+    import users_api
+
+    app.register_blueprint(auth.blueprint)
+
+    app.register_blueprint(jobs_view.blueprint)
+    app.register_blueprint(departments_view.blueprint)
+    app.register_blueprint(users_view.blueprint)
+    
+    app.register_blueprint(jobs_api.blueprint)
+    app.register_blueprint(users_api.blueprint)
     app.run()
 
 

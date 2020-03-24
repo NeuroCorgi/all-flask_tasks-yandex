@@ -3,7 +3,7 @@ from datetime import datetime
 from flask import (
     Blueprint,
     jsonify,
-    request,
+    request
 )
 
 from data import __all_models as  models

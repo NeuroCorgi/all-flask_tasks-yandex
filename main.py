@@ -13,6 +13,7 @@ def add_capitan():
     user.speciality = "research engineer"
     user.address = "module_1"
     user.email = "scott_chief@mars.org"
+    user.city_from = "kennedy"
     user.set_password('skottridley')
     session = db.create_session()
     session.add(user)
@@ -35,3 +36,5 @@ def add_job():
 
 if __name__ == '__main__':
     db.global_init('db/mars.sqlite')
+    add_capitan()
+    add_job()

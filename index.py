@@ -12,6 +12,7 @@ from flask_login import (
     LoginManager,
     current_user,
 )
+from flask_restful import Api
 
 from data import __all_models as models
 from data import db_session as db
@@ -22,13 +23,20 @@ from forms import (
 )
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = str(uuid4())
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
-app.config['DATABASE_NAME'] = 'db/mars.sqlite'
-app.config['TESTING'] = False
+
+api = Api(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+    
+import auth
+
+import jobs_view
+import departments_view
+import users_view
+
+import users_resource
+import jobs_resource
 
 
 @login_manager.user_loader
@@ -50,31 +58,28 @@ def home():
                            title='Mars')
 
 
-if app.config['TESTING']:
-    import jobs_api
-    app.register_blueprint(jobs_api.blueprint)
+app.register_blueprint(auth.blueprint)
+
+# Views
+app.register_blueprint(jobs_view.blueprint)
+app.register_blueprint(departments_view.blueprint)
+app.register_blueprint(users_view.blueprint)
+
+# Restful api
+api.add_resource(users_resource.UsersListResource, '/api/v2/users')
+api.add_resource(users_resource.UsersResource, '/api/v2/users/<int:user_id>')
+
+api.add_resource(jobs_resource.JobsListResource, '/api/jobs')
+api.add_resource(jobs_resource.JobsResource, '/api/jobs/<int:job_id>')
 
 
 def main():
+    app.config['SECRET_KEY'] = str(uuid4())
+    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
+    app.config['DATABASE_NAME'] = 'db/mars.sqlite'
+
     db.global_init(app.config['DATABASE_NAME'])
-    
-    import auth
 
-    import jobs_view
-    import departments_view
-    import users_view
-
-    import jobs_api
-    import users_api
-
-    app.register_blueprint(auth.blueprint)
-
-    app.register_blueprint(jobs_view.blueprint)
-    app.register_blueprint(departments_view.blueprint)
-    app.register_blueprint(users_view.blueprint)
-    
-    app.register_blueprint(jobs_api.blueprint)
-    app.register_blueprint(users_api.blueprint)
     app.run()
 
 

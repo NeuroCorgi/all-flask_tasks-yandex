@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 from sqlalchemy_serializer.serializer import (
     SerializerMixin
@@ -28,25 +28,40 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     address = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     email = sqlalchemy.Column(sqlalchemy.String, index=True, unique=True, nullable=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    modifed_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
+    modifed_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.now)
     city_from = sqlalchemy.Column(sqlalchemy.String)
 
     jobs = orm.relation('Jobs', back_populates='user')
     departments = orm.relationship('Department', back_populates='user')
 
-    def __init__(self, **kwargs):
-        if kwargs:
-            self.email = kwargs['email']
+    def __init__(self, 
+                 surname: str,
+                 name: str,
+                 email: str,
+                 age: int,
+                 position: str,
+                 speciality: str,
+                 address: str,
+                 city_from: str,
+                 password: str,
+                 modifed_date: datetime="",):
+        self.email = email
 
-            self.surname = kwargs['surname']
-            self.name = kwargs['name']
+        self.surname = surname
+        self.name = name
 
-            self.age = kwargs['age']
+        self.age = age
 
-            self.position = kwargs['position']
-            self.speciality = kwargs['speciality']
+        self.position = position
+        self.speciality = speciality
 
-            self.address = kwargs['address']
+        self.address = address
+        self.city_from = city_from
+
+        self.set_password(password)
+        
+        if modifed_date:
+            self.modifed_date = modifed_date
 
 
     def __repr__(self):
